@@ -1,0 +1,32 @@
+name: Validate Changes
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Salesforce CLI
+      run: |
+        npm install sfdx-cli --global
+
+    - name: Authenticate with Salesforce
+      env:
+        SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+      run: |
+        echo $SFDX_AUTH_URL > sfdx-auth-url.txt
+        sfdx auth:sfdxurl:store -f sfdx-auth-url.txt -a DevHub
+
+    - name: Validate deployment
+      run: |
+        sfdx force:source:deploy -u DevHub -p force-app/main/default --checkonly --testlevel RunLocalTests
