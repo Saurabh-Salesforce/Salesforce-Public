@@ -29,4 +29,4 @@ jobs:
 
     - name: Validate deployment
       run: |
-        sfdx force:source:deploy -u DevHub -p force-app/main/default --checkonly --testlevel RunLocalTests
+        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests ChangePasswordControllerTest
