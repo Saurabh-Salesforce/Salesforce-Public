@@ -10,7 +10,7 @@ private class batchApexTest {
         }
         insert accounts;
 
-        // Create an instance of the batch class
+        // Create an instance of the batch class test
         batchApex batch = new batchApex();
         
         // Start the test
