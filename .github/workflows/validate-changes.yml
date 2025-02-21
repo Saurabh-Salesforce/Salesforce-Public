@@ -32,6 +32,7 @@ jobs:
       run: |
         TEST_CLASSES=$(cat test-classes.txt | tr '\n' ',' | sed 's/,$//')
         echo "::set-output name=test_classes::$TEST_CLASSES"
+        echo "Test classes to be run: $TEST_CLASSES"
 
     - name: Validate deployment
       run: |
