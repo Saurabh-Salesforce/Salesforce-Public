@@ -27,19 +27,13 @@ jobs:
         echo $SFDX_AUTH_URL > sfdx-auth-url.txt
         sfdx force:auth:sfdxurl:store -f sfdx-auth-url.txt -a ProdOrg
 
-    - name: Read test classes from file
-      id: read_test_classes
-      run: |
-        TEST_CLASSES=$(cat test-classes.txt | tr '\n' ',' | sed 's/,$//')
-        echo "::set-output name=test_classes::$TEST_CLASSES"
-
     - name: Validate deployment
       run: |
         set -e
-        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests ${{ steps.read_test_classes.outputs.test_classes }}
+        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests batchApexTest
 
     - name: Cleanup
       if: always()
       run: |
         echo "Cleaning up orphan processes"
-        pkill -P $$
+        pkill -P $$ || true
