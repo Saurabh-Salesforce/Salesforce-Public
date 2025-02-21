@@ -29,10 +29,11 @@ jobs:
 
     - name: Validate deployment
       run: |
-        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests ChangePasswordControllerTest
+        set -e
+        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests batchApexTest
 
-  name: Cleanup
+    - name: Cleanup
       if: always()
       run: |
         echo "Cleaning up orphan processes"
-        pkill -P $$        
+        pkill -P $$ || true
