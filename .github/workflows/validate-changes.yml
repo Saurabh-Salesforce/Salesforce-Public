@@ -31,13 +31,13 @@ jobs:
       id: read_test_classes
       run: |
         TEST_CLASSES=$(cat test-classes.txt | tr '\n' ',' | sed 's/,$//')
-        echo "::set-output name=test_classes::$TEST_CLASSES"
+        echo "test_classes=$TEST_CLASSES" >> $GITHUB_ENV
         echo "Test classes to be run: $TEST_CLASSES"
 
     - name: Validate deployment
       run: |
         set -e
-        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests ${{ steps.read_test_classes.outputs.test_classes }}
+        sfdx force:source:deploy -u ProdOrg -p force-app/main/default --checkonly --testlevel RunSpecifiedTests --runtests ${{ env.test_classes }}
 
     - name: Cleanup
       if: always()
